@@ -35,11 +35,12 @@ async function preencherPorCNPJ(cnpj) {
     document.getElementById('razaoSocial').value = data.razao_social || '';
     document.getElementById('nomeFantasia').value = data.nome_fantasia || '';
     document.getElementById('cep').value = data.cep || '';
-    document.getElementById('logradouro').value = data.descricao_tipo_de_logradouro + ' ' + (data.logradouro || '');
+    document.getElementById('logradouro').value = (data.descricao_tipo_de_logradouro ? data.descricao_tipo_de_logradouro + ' ' : '') + (data.logradouro || '');
     document.getElementById('bairro').value = data.bairro || '';
     document.getElementById('municipio').value = data.municipio || '';
     document.getElementById('uf').value = data.uf || '';
-    showFeedback('Dados preenchidos com sucesso!', false);
+    showFeedback('Dados do CNPJ preenchidos automaticamente!', false);
+    if (data.cep) preencherPorCEP(data.cep);
   } catch (err) {
     if (err.message === '404') {
       showFeedback('CNPJ não encontrado.');
@@ -75,7 +76,22 @@ async function preencherPorCEP(cep) {
   showLoading(false);
 }
 window.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('cnpj').addEventListener('blur', function() {
+  const cnpjInput = document.getElementById('cnpj');
+  // Máscara de CNPJ e busca automática
+  cnpjInput.addEventListener('input', function() {
+    let v = onlyDigits(this.value);
+    if (v.length > 14) v = v.slice(0, 14);
+    let masked = v;
+    if (v.length > 2) masked = v.slice(0,2) + '.' + v.slice(2);
+    if (v.length > 5) masked = masked.slice(0,6) + '.' + masked.slice(6);
+    if (v.length > 8) masked = masked.slice(0,10) + '/' + masked.slice(10);
+    if (v.length > 12) masked = masked.slice(0,15) + '-' + masked.slice(15);
+    this.value = masked;
+    if (v.length === 14) {
+      preencherPorCNPJ(this.value);
+    }
+  });
+  cnpjInput.addEventListener('blur', function() {
     preencherPorCNPJ(this.value);
   });
   const cepInput = document.getElementById('cep');

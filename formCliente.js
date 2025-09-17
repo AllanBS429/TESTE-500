@@ -1,24 +1,17 @@
-// Funções utilitárias para cliente
-// Remove todos os caracteres não numéricos (usado para CPF e CEP)
+// Funções utilitárias para empresa
 function onlyDigits(str) {
   return str.replace(/\D/g, '');
 }
-
-// Exibe ou oculta o spinner de carregamento e desabilita o botão de salvar
 function showLoading(show = true) {
   document.getElementById('loading').style.display = show ? 'block' : 'none';
   document.getElementById('btnSalvar').disabled = show;
 }
-
-// Exibe mensagens de feedback para o usuário (erro ou sucesso)
 function showFeedback(msg, isError = true) {
   const feedback = document.getElementById('feedback');
   feedback.textContent = msg;
   feedback.style.color = isError ? '#d63031' : '#0984e3';
   if (msg) feedback.focus();
 }
-
-// Realiza requisições Fetch e retorna o JSON (com tratamento de erro)
 async function fetchJSON(url) {
   try {
     const resp = await fetch(url);
@@ -28,8 +21,34 @@ async function fetchJSON(url) {
     throw err;
   }
 }
-
-// Preenche os campos de endereço automaticamente ao digitar o CEP
+async function preencherPorCNPJ(cnpj) {
+  showLoading(true);
+  showFeedback('');
+  cnpj = onlyDigits(cnpj);
+  if (cnpj.length !== 14) {
+    showLoading(false);
+    showFeedback('CNPJ inválido.');
+    return;
+  }
+  try {
+    const data = await fetchJSON(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+    document.getElementById('nomeCompleto').value = data.razao_social || '';
+    document.getElementById('cep').value = data.cep || '';
+    document.getElementById('logradouro').value = (data.descricao_tipo_de_logradouro ? data.descricao_tipo_de_logradouro + ' ' : '') + (data.logradouro || '');
+    document.getElementById('bairro').value = data.bairro || '';
+    document.getElementById('municipio').value = data.municipio || '';
+    document.getElementById('uf').value = data.uf || '';
+    showFeedback('Dados do CNPJ preenchidos automaticamente!', false);
+    if (data.cep) preencherPorCEP(data.cep);
+  } catch (err) {
+    if (err.message === '404') {
+      showFeedback('CNPJ não encontrado.');
+    } else {
+      showFeedback('Erro ao consultar CNPJ. Tente novamente.');
+    }
+  }
+  showLoading(false);
+}
 async function preencherPorCEP(cep) {
   showLoading(true);
   showFeedback('');
@@ -55,10 +74,25 @@ async function preencherPorCEP(cep) {
   }
   showLoading(false);
 }
-
-// Eventos principais do formulário de cliente
 window.addEventListener('DOMContentLoaded', function() {
-  // Preenche endereço ao digitar ou sair do campo CEP
+  const cnpjInput = document.getElementById('cnpj');
+  // Máscara de CNPJ e busca automática
+  cnpjInput.addEventListener('input', function() {
+    let v = onlyDigits(this.value);
+    if (v.length > 14) v = v.slice(0, 14);
+    let masked = v;
+    if (v.length > 2) masked = v.slice(0,2) + '.' + v.slice(2);
+    if (v.length > 5) masked = masked.slice(0,6) + '.' + masked.slice(6);
+    if (v.length > 8) masked = masked.slice(0,10) + '/' + masked.slice(10);
+    if (v.length > 12) masked = masked.slice(0,15) + '-' + masked.slice(15);
+    this.value = masked;
+    if (v.length === 14) {
+      preencherPorCNPJ(this.value);
+    }
+  });
+  cnpjInput.addEventListener('blur', function() {
+    preencherPorCNPJ(this.value);
+  });
   const cepInput = document.getElementById('cep');
   cepInput.addEventListener('blur', function() {
     preencherPorCEP(this.value);
@@ -68,47 +102,42 @@ window.addEventListener('DOMContentLoaded', function() {
       preencherPorCEP(this.value);
     }
   });
-  // Ao enviar o formulário, salva o cliente e atualiza a lista
-  document.getElementById('formCliente').addEventListener('submit', function(e) {
+  document.getElementById('formEmpresa').addEventListener('submit', function(e) {
     e.preventDefault();
-    const cliente = {
-      cpf: document.getElementById('cpf').value,
-      nomeCompleto: document.getElementById('nomeCompleto').value,
+    const empresa = {
+      cnpj: document.getElementById('cnpj').value,
+      razaoSocial: document.getElementById('razaoSocial').value,
+      nomeFantasia: document.getElementById('nomeFantasia').value,
       cep: document.getElementById('cep').value,
       logradouro: document.getElementById('logradouro').value,
       bairro: document.getElementById('bairro').value,
       municipio: document.getElementById('municipio').value,
       uf: document.getElementById('uf').value
     };
-    salvarCliente(cliente);
+    salvarEmpresa(empresa);
     showFeedback('Cadastro salvo!', false);
     this.reset();
-    exibirClientes();
+    exibirEmpresas();
   });
-  // Exibe a lista de clientes ao carregar a página
-  exibirClientes();
+  exibirEmpresas();
 });
-
-// Salva o cliente no localStorage, gerando um id único
-function salvarCliente(cliente) {
-  let clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
-  cliente.id = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-  clientes.push(cliente);
-  localStorage.setItem('clientes', JSON.stringify(clientes));
+function salvarEmpresa(empresa) {
+  let empresas = JSON.parse(localStorage.getItem('empresas') || '[]');
+  empresa.id = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+  empresas.push(empresa);
+  localStorage.setItem('empresas', JSON.stringify(empresas));
 }
-
-// Exibe a lista de clientes salvos abaixo do formulário
-function exibirClientes() {
-  const clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
-  const ul = document.getElementById('clientesUl');
+function exibirEmpresas() {
+  const empresas = JSON.parse(localStorage.getItem('empresas') || '[]');
+  const ul = document.getElementById('empresasUl');
   ul.innerHTML = '';
-  if (clientes.length === 0) {
-    ul.innerHTML = '<li>Nenhum cliente cadastrado.</li>';
+  if (empresas.length === 0) {
+    ul.innerHTML = '<li>Nenhuma empresa cadastrada.</li>';
     return;
   }
-  clientes.forEach((c, i) => {
+  empresas.forEach((e, i) => {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${c.nomeCompleto}</strong> (ID: ${c.id})<br>CPF: ${c.cpf}<br> ${c.logradouro}, ${c.bairro}, ${c.municipio} - ${c.uf} | CEP: ${c.cep}`;
+    li.innerHTML = `<strong>${e.razaoSocial}</strong> (ID: ${e.id})<br>CNPJ: ${e.cnpj}<br> ${e.logradouro}, ${e.bairro}, ${e.municipio} - ${e.uf} | CEP: ${e.cep}`;
     ul.appendChild(li);
   });
 }
