@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Fornecedor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+  <!-- Título principal do formulário -->
+  <h1>Cadastro de Fornecedor</h1>
+  <!-- Formulário de cadastro, preenchido automaticamente por CNPJ e CEP -->
+  <form id="formFornecedor" autocomplete="off">
+  <div class="form-group">
+        <label for="cnpj">CNPJ</label>
+        <input type="text" id="cnpj" name="cnpj" maxlength="18" required>
+      </div>
+      <div class="form-group">
+        <label for="razaoSocial">Razão Social</label>
+        <input type="text" id="razaoSocial" name="razaoSocial" required>
+      </div>
+      <div class="form-group">
+        <label for="nomeFantasia">Nome Fantasia</label>
+        <input type="text" id="nomeFantasia" name="nomeFantasia">
+      </div>
+      <div class="form-group">
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" name="cep" maxlength="9" required>
+      </div>
+      <div class="form-group">
+        <label for="logradouro">Logradouro</label>
+        <input type="text" id="logradouro" name="logradouro">
+      </div>
+      <div class="form-group">
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" name="bairro">
+      </div>
+      <div class="form-group">
+        <label for="municipio">Município</label>
+        <input type="text" id="municipio" name="municipio">
+      </div>
+      <div class="form-group">
+        <label for="uf">UF</label>
+        <input type="text" id="uf" name="uf" maxlength="2">
+      </div>
+      <button type="submit" id="btnSalvar">Salvar</button>
+      <div id="loading" class="spinner" aria-live="polite" style="display:none;">Consultando...</div>
+      <div id="feedback" aria-live="assertive" class="feedback"></div>
+  </form>
+  <!-- Área de exibição da lista de clientes salvos -->
+    <section id="listaClientes" class="clientes-lista">
+      <h2>Clientes Salvos</h2>
+      <ul id="clientesUl"></ul>
+    </section>
+    <div style="text-align:center; margin-top:24px;">
+      <!-- Botão para acessar a página de pesquisa de fornecedores -->
+      <a href="fornecedores.html">
+        <button type="button" style="width:auto; padding:10px 24px; background:#00b894; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:bold; cursor:pointer; margin-right:12px;">Ir para pesquisa de fornecedores</button>
+      </a>
+      <!-- Botão Home com ícone de casa para voltar ao index -->
+      <a href="index.html">
+        <button type="button" style="width:auto; padding:10px 24px; background:#636e72; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:bold; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+          <span style="display:inline-block; width:20px; height:20px; vertical-align:middle;">
+            <!-- Ícone SVG de casa -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="20" height="20"><path d="M3 11.5V21a1 1 0 0 0 1 1h5v-6h6v6h5a1 1 0 0 0 1-1v-9.5a1 1 0 0 0-.293-.707l-9-9a1 1 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 11.5z"/></svg>
+          </span>
+          Home
+        </button>
+      </a>
+    </div>
+  </main>
+  <script src="form.js"></script>
+</body>
+</html>

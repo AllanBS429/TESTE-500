@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesquisa de Fornecedores</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Fornecedores Cadastrados</h1>
+    <div class="form-group">
+      <label for="pesquisaFornecedor">Pesquisar fornecedor</label>
+      <input type="text" id="pesquisaFornecedor" placeholder="Digite razão social, CNPJ ou cidade...">
+    </div>
+    <section id="listaFornecedores" class="clientes-lista">
+      <ul id="fornecedoresUl"></ul>
+    </section>
+    <div class="info-id">
+      <p><strong>Observação:</strong> O campo <b>ID</b> é gerado automaticamente para cada fornecedor cadastrado e aparece na lista.</p>
+    </div>
+    <a href="fornecedor.html">Voltar ao cadastro</a>
+    <a href="index.html" style="margin-left:16px;">
+      <button type="button" style="width:auto; padding:10px 24px; background:#636e72; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:bold; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+        <span style="display:inline-block; width:20px; height:20px; vertical-align:middle;">
+          <!-- Ícone SVG de casa -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="20" height="20"><path d="M3 11.5V21a1 1 0 0 0 1 1h5v-6h6v6h5a1 1 0 0 0 1-1v-9.5a1 1 0 0 0-.293-.707l-9-9a1 1 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 11.5z"/></svg>
+        </span>
+        Home
+      </button>
+    </a>
+  </main>
+  <script src="fornecedores.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 100%);
+  margin: 0;
+  min-height: 100vh;
+}
+.container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+}
+h1 {
+  text-align: center;
+  color: #2d3e50;
+  margin-bottom: 24px;
+}
+.form-group {
+  margin-bottom: 18px;
+}
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #34495e;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+input:focus {
+  border-color: #0984e3;
+  outline: none;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background: #0984e3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:disabled {
+  background: #b2bec3;
+  cursor: not-allowed;
+}
+.spinner {
+  text-align: center;
+  margin: 16px 0;
+  color: #636e72;
+  font-size: 1rem;
+}
+.feedback {
+  margin-top: 10px;
+  color: #d63031;
+  font-size: 0.98rem;
+  min-height: 22px;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 16px 8px;
+  }
+}
+  .clientes-lista ul li {
+    margin-bottom: 18px;
+    padding: 12px;
+    background: #f1f2f6;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .id-destaque {
+    display: inline-block;
+    background: #0984e3;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+  }
+ <!--nessa parte fica o menu do index-->
+.menu-principal {
+  text-align: center;
+  margin: 32px 0 24px 0;
+}
+
+.menu-principal ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* força coluna */
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.menu-principal li {
+  width: 100%;
+  max-width: 320px;
+}
+
+.menu-principal li a {
+  display: block;
+  text-decoration: none;
+  background: #0984e3;
+  color: #fff;
+  padding: 18px 0;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  text-align: center;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.menu-principal li a:hover {
+  background: #00b894;
+}
+
+@media (max-width: 600px) {
+  .menu-principal ul {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .menu-principal li {
+    max-width: 100%;
+  }
+}
